@@ -21,12 +21,7 @@ void app_main(void)
         .clk_src = ADC_DIGI_CLK_SRC_DEFAULT,
     };
 
-    ret = adc_oneshot_new_unit(&init_cfg, &adc_handle);
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "adc_oneshot_new_unit failed: %s", esp_err_to_name(ret));
-        return;
-    }
-    ESP_LOGI(TAG, "adc unit %d created", init_cfg.unit_id);
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_cfg, &adc_handle));
 
     adc_channel_t channel = ADC_CHANNEL_0;
     adc_oneshot_chan_cfg_t chan_cfg = {
@@ -34,13 +29,7 @@ void app_main(void)
         .bitwidth = ADC_BITWIDTH_DEFAULT,
     };
 
-    ret = adc_oneshot_config_channel(adc_handle, channel, &chan_cfg);
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "adc_oneshot_config_channel failed: %s", esp_err_to_name(ret));
-        adc_oneshot_del_unit(adc_handle);
-        return;
-    }
-    ESP_LOGI(TAG, "adc channel %d configured", channel);
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle, channel, &chan_cfg));
 
     while (1) {
         int raw = 0;
